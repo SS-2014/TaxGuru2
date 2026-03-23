@@ -1,0 +1,19 @@
+[theme]
+# Match our dark theme so Streamlit doesn't fight our CSS
+primaryColor = "#D4A843"
+backgroundColor = "#0B0F19"
+secondaryBackgroundColor = "#111827"
+textColor = "#F1F5F9"
+font = "sans serif"
+
+[server]
+headless = true
+address = "0.0.0.0"
+port = 8501
+
+[browser]
+gatherUsageStats = false
+
+[client]
+showSidebarNavigation = false
+toolbarMode = "minimal"
