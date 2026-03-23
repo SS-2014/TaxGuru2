@@ -1,0 +1,33 @@
+name: Weekly Tax KB Update
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday 6 AM UTC (11:30 AM IST)
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  update-kb:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Check for new CBDT circulars and update KB
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/update_kb.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "TaxGuru Bot"
+          git config user.email "bot@taxguru.app"
+          git add knowledge_base.py
+          git diff --cached --quiet || git commit -m "Auto-update: KB refreshed $(date +%Y-%m-%d)"
+          git push || echo "No changes to push"
